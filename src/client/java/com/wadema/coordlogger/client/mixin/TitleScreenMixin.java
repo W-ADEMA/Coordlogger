@@ -28,7 +28,17 @@ public class TitleScreenMixin {
     private String y;
     private String z;
 
+    private String line1;
+    private String line2;
+    private String line3;
+    private String line4;
+    private String line5;
+    private String line6;
+    private String[] lines;
+
     private boolean hasLocationData = false;
+
+    private int textWidth;
 
     private void loadLastLocation() {
         Path file = FabricLoader.getInstance()
@@ -36,6 +46,13 @@ public class TitleScreenMixin {
                 .resolve("coordlogger-last-location.json");
 
         if (!Files.exists(file)) {
+            lines = new String[] {
+                    "No logout location has been detected yet"
+            };
+
+            Minecraft minecraft = Minecraft.getInstance();
+            textWidth = minecraft.font.width(lines[0]);
+
             return;
         }
 
@@ -58,18 +75,57 @@ public class TitleScreenMixin {
 
             hasLocationData = true;
 
+            Minecraft minecraft = Minecraft.getInstance();
+
+            line1 = "Type: " + type;
+
+            if ("Singleplayer".equals(type)) {
+                line2 = "World: " + world;
+            } else {
+                line2 = "Address: " + address;
+            }
+
+            line3 = "Dimension: " + dimension;
+            line4 = "X: " + x;
+            line5 = "Y: " + y;
+            line6 = "Z: " + z;
+
+            lines = new String[] {
+                    line1,
+                    line2,
+                    line3,
+                    line4,
+                    line5,
+                    line6
+            };
+
+            int tempTextWidth = minecraft.font.width(line1);
+
+            tempTextWidth = Math.max(tempTextWidth, minecraft.font.width(line2));
+            tempTextWidth = Math.max(tempTextWidth, minecraft.font.width(line3));
+            tempTextWidth = Math.max(tempTextWidth, minecraft.font.width(line4));
+            tempTextWidth = Math.max(tempTextWidth, minecraft.font.width(line5));
+            tempTextWidth = Math.max(tempTextWidth, minecraft.font.width(line6));
+
+            textWidth = tempTextWidth;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void drawText(GuiGraphicsExtractor graphics, String text, int y) {
+    private void drawText(
+            GuiGraphicsExtractor graphics,
+            String text,
+            int x,
+            int y
+    ) {
         Minecraft minecraft = Minecraft.getInstance();
 
         graphics.text(
                 minecraft.font,
                 text,
-                10,
+                x,
                 y,
                 0xFFFFFFFF,
                 true
@@ -89,22 +145,69 @@ public class TitleScreenMixin {
             float delta,
             CallbackInfo ci
     ) {
-        if (!hasLocationData) {
-            drawText(graphics, "No logout location has been detected yet", 10);
-            return;
+        int panelX = 5;
+        int panelY = 5;
+
+        int padding = 5;
+        int lineHeight = 12;
+        int lineCount = hasLocationData ? 6 : 1;
+
+        int panelWidth = textWidth + padding * 2;
+        int panelHeight = padding + lineCount * lineHeight;
+
+        // Render background
+        graphics.fill(
+                panelX,
+                panelY,
+                panelX + panelWidth,
+                panelY + panelHeight,
+                0x80000000
+        );
+
+        // Render top border
+        graphics.fill(
+                panelX,
+                panelY,
+                panelX + panelWidth,
+                panelY + 1,
+                0x80FFFFFF
+        );
+
+        // Render bottom border
+        graphics.fill(
+                panelX,
+                panelY + panelHeight - 1,
+                panelX + panelWidth,
+                panelY + panelHeight,
+                0x80FFFFFF
+        );
+
+        // Render left border
+        graphics.fill(
+                panelX,
+                panelY,
+                panelX + 1,
+                panelY + panelHeight,
+                0x80FFFFFF
+        );
+
+        // Render right border
+        graphics.fill(
+                panelX + panelWidth - 1,
+                panelY,
+                panelX + panelWidth,
+                panelY + panelHeight,
+                0x80FFFFFF
+        );
+
+        // Render text
+        for (int i = 0; i < lines.length; i++) {
+            drawText(
+                    graphics,
+                    lines[i],
+                    panelX + padding,
+                    panelY + padding + lineHeight * i
+            );
         }
-
-        drawText(graphics, "Type: " + type, 10);
-
-        if ("Singleplayer".equals(type)) {
-            drawText(graphics, "World: " + world, 22);
-        } else {
-            drawText(graphics, "Address: " + address, 22);
-        }
-
-        drawText(graphics, "Dimension: " + dimension, 34);
-        drawText(graphics, "X: " + x, 46);
-        drawText(graphics, "Y: " + y, 58);
-        drawText(graphics, "Z: " + z, 70);
     }
 }
