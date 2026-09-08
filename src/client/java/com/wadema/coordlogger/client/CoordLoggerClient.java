@@ -7,6 +7,10 @@ import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,23 +54,28 @@ public class CoordLoggerClient implements ClientModInitializer {
 
 				Path file = FabricLoader.getInstance()
 						.getConfigDir()
-						.resolve("coordlogger-last-location.txt");
+						.resolve("coordlogger-last-location.json");
 
-				String data = String.format(
-						"Type=%s%n" +
-								"%s=%s%n" +
-								"Dimension=%s%n" +
-								"X=%.2f%n" +
-								"Y=%.2f%n" +
-								"Z=%.2f%n",
-						type,
-						type.equals("Singleplayer") ? "World" : "Address",
-						locationName,
-						dimension,
-						x,
-						y,
-						z
-				);
+				JsonObject json = new JsonObject();
+
+				json.addProperty("Type", type);
+
+				if (type.equals("Singleplayer")) {
+					json.addProperty("World", locationName);
+				} else {
+					json.addProperty("Address", locationName);
+				}
+
+				json.addProperty("Dimension", dimension);
+				json.addProperty("X", x);
+				json.addProperty("Y", y);
+				json.addProperty("Z", z);
+
+				Gson gson = new GsonBuilder()
+						.setPrettyPrinting()
+						.create();
+
+				String data = gson.toJson(json);
 
 				try {
 					Files.writeString(file, data);
