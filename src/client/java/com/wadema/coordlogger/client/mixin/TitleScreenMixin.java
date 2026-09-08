@@ -28,6 +28,8 @@ public class TitleScreenMixin {
     private String y;
     private String z;
 
+    private boolean hasLocationData = false;
+
     private void loadLastLocation() {
         Path file = FabricLoader.getInstance()
                 .getConfigDir()
@@ -43,7 +45,7 @@ public class TitleScreenMixin {
 
             type = json.get("Type").getAsString();
 
-            if (type.equals("Singleplayer")) {
+            if ("Singleplayer".equals(type)) {
                 world = json.get("World").getAsString();
             } else {
                 address = json.get("Address").getAsString();
@@ -53,6 +55,8 @@ public class TitleScreenMixin {
             x = json.get("X").getAsString();
             y = json.get("Y").getAsString();
             z = json.get("Z").getAsString();
+
+            hasLocationData = true;
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,9 +89,14 @@ public class TitleScreenMixin {
             float delta,
             CallbackInfo ci
     ) {
+        if (!hasLocationData) {
+            drawText(graphics, "No logout location has been detected yet", 10);
+            return;
+        }
+
         drawText(graphics, "Type: " + type, 10);
 
-        if (type.equals("Singleplayer")) {
+        if ("Singleplayer".equals(type)) {
             drawText(graphics, "World: " + world, 22);
         } else {
             drawText(graphics, "Address: " + address, 22);
