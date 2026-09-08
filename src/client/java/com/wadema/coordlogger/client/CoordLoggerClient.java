@@ -67,9 +67,9 @@ public class CoordLoggerClient implements ClientModInitializer {
 				}
 
 				json.addProperty("Dimension", dimension);
-				json.addProperty("X", x);
-				json.addProperty("Y", y);
-				json.addProperty("Z", z);
+				json.addProperty("X", Math.round(x * 100.0) / 100.0);
+				json.addProperty("Y", Math.round(y * 100.0) / 100.0);
+				json.addProperty("Z", Math.round(z * 100.0) / 100.0);
 
 				Gson gson = new GsonBuilder()
 						.setPrettyPrinting()
@@ -80,8 +80,6 @@ public class CoordLoggerClient implements ClientModInitializer {
 				try {
 					Files.writeString(file, data);
 
-					System.out.println("Last location saved:");
-					System.out.print(data);
 				} catch (IOException e) {
 					System.err.println("Failed to save coordinates!");
 					e.printStackTrace();

@@ -22,6 +22,7 @@ public class TitleScreenMixin {
 
     private String type;
     private String world;
+    private String address;
     private String dimension;
     private String x;
     private String y;
@@ -41,7 +42,13 @@ public class TitleScreenMixin {
             JsonObject json = JsonParser.parseString(jsonString).getAsJsonObject();
 
             type = json.get("Type").getAsString();
-            world = json.get("World").getAsString();
+
+            if (type.equals("Singleplayer")) {
+                world = json.get("World").getAsString();
+            } else {
+                address = json.get("Address").getAsString();
+            }
+
             dimension = json.get("Dimension").getAsString();
             x = json.get("X").getAsString();
             y = json.get("Y").getAsString();
@@ -79,7 +86,13 @@ public class TitleScreenMixin {
             CallbackInfo ci
     ) {
         drawText(graphics, "Type: " + type, 10);
-        drawText(graphics, "World: " + world, 22);
+
+        if (type.equals("Singleplayer")) {
+            drawText(graphics, "World: " + world, 22);
+        } else {
+            drawText(graphics, "Address: " + address, 22);
+        }
+
         drawText(graphics, "Dimension: " + dimension, 34);
         drawText(graphics, "X: " + x, 46);
         drawText(graphics, "Y: " + y, 58);
