@@ -3,7 +3,6 @@
 	"package": "com.wadema.loggedout.client.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"client": [
-		"ExampleClientMixin",
 		"TitleScreenMixin"
 	],
 	"injectors": {
