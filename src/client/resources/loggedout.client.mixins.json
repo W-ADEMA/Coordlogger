@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "com.wadema.coordlogger.client.mixin",
+	"package": "com.wadema.loggedout.client.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"client": [
 		"ExampleClientMixin",

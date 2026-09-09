@@ -1,4 +1,4 @@
-package com.wadema.coordlogger.client.mixin;
+package com.wadema.loggedout.client.mixin;
 
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;

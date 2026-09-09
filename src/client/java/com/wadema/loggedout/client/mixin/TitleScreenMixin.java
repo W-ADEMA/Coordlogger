@@ -1,4 +1,4 @@
-package com.wadema.coordlogger.client.mixin;
+package com.wadema.loggedout.client.mixin;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -43,7 +43,7 @@ public class TitleScreenMixin {
     private void loadLastLocation() {
         Path file = FabricLoader.getInstance()
                 .getConfigDir()
-                .resolve("coordlogger-last-location.json");
+                .resolve("loggedout.json");
 
         if (!Files.exists(file)) {
             lines = new String[] {
@@ -138,7 +138,7 @@ public class TitleScreenMixin {
     }
 
     @Inject(method = "extractRenderState", at = @At("TAIL"))
-    private void renderCoordLoggerValues(
+    private void renderloggedoutValues(
             GuiGraphicsExtractor graphics,
             int mouseX,
             int mouseY,

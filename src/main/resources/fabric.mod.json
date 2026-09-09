@@ -1,31 +1,31 @@
 {
 	"schemaVersion": 1,
-	"id": "coordlogger",
+	"id": "loggedout",
 	"version": "${version}",
-	"name": "CoordLogger",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Logged Out",
+	"description": "This mod logs the coords of your last logout, and puts them on your title screen",
 	"authors": [
-		"Me!"
+		"WADEMA"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/coordlogger/icon.png",
+	"icon": "assets/Loggedout/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.wadema.coordlogger.CoordLogger"
+			"com.wadema.loggedout.LoggedOut"
 		],
 		"client": [
-			"com.wadema.coordlogger.client.CoordLoggerClient"
+			"com.wadema.loggedout.client.LoggedOutClient"
 		]
 	},
 	"mixins": [
-		"coordlogger.mixins.json",
+		"loggedout.mixins.json",
 		{
-			"config": "coordlogger.client.mixins.json",
+			"config": "loggedout.client.mixins.json",
 			"environment": "client"
 		}
 	],

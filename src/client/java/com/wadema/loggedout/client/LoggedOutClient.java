@@ -1,4 +1,4 @@
-package com.wadema.coordlogger.client;
+package com.wadema.loggedout.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class CoordLoggerClient implements ClientModInitializer {
+public class LoggedOutClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 
@@ -54,7 +54,7 @@ public class CoordLoggerClient implements ClientModInitializer {
 
 				Path file = FabricLoader.getInstance()
 						.getConfigDir()
-						.resolve("coordlogger-last-location.json");
+						.resolve("loggedout.json");
 
 				JsonObject json = new JsonObject();
 

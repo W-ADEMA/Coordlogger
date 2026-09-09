@@ -1,4 +1,4 @@
-# CoordLogger
+# loggedout
 
 A client-side Minecraft Fabric mod that saves the player's last logout location.
 
@@ -18,6 +18,6 @@ A client-side Minecraft Fabric mod that saves the player's last logout location.
 
 The last logout location is saved to:
 
-`config/coordlogger-last-location.json`
+`config/loggedout.json`
 
 in the Minecraft instance's config directory.
