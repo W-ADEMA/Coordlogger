@@ -2,13 +2,18 @@ package com.wadema.loggedout.client.mixin;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.Minecraft;
+
 import net.fabricmc.loader.api.FabricLoader;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -137,6 +142,55 @@ public class TitleScreenMixin {
         loadLastLocation();
     }
 
+    @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
+    private void onMouseClicked(
+            MouseButtonEvent event,
+            boolean doubleClick,
+            CallbackInfoReturnable<Boolean> cir
+    ) {
+        // Only respond to left mouse button
+        if (event.button() != 0) {
+            return;
+        }
+
+        if (line4 == null || line5 == null || line6 == null) {
+            return;
+        }
+
+        int panelX = 5;
+        int panelY = 5;
+
+        int padding = 5;
+        int lineHeight = 12;
+        int lineCount = hasLocationData ? 6 : 1;
+
+        int panelWidth = textWidth + padding * 2;
+        int panelHeight = padding + lineCount * lineHeight;
+
+        double mouseX = event.x();
+        double mouseY = event.y();
+
+        // Check whether the mouse is inside the panel
+        if (mouseX >= panelX
+                && mouseX < panelX + panelWidth
+                && mouseY >= panelY
+                && mouseY < panelY + panelHeight) {
+
+            Minecraft minecraft = Minecraft.getInstance();
+
+            minecraft.keyboardHandler.setClipboard(line3 + " \n" + line4 + " \n" + line5 + " \n" + line6);
+
+            minecraft.getSoundManager().play(
+                    SimpleSoundInstance.forUI(
+                            SoundEvents.UI_BUTTON_CLICK,
+                            1.0F
+                    )
+            );
+
+            cir.setReturnValue(true);
+        }
+    }
+
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void renderloggedoutValues(
             GuiGraphicsExtractor graphics,
@@ -155,13 +209,27 @@ public class TitleScreenMixin {
         int panelWidth = textWidth + padding * 2;
         int panelHeight = padding + lineCount * lineHeight;
 
+        // Check if the mouse is hovering over the panel
+        boolean isHovered = hasLocationData
+                && mouseX >= panelX
+                && mouseX < panelX + panelWidth
+                && mouseY >= panelY
+                && mouseY < panelY + panelHeight;
+
+
+        int backgroundColor = 0x80000000;
+
+        if (isHovered) {
+            backgroundColor = 0xA0202020;
+        }
+
         // Render background
         graphics.fill(
                 panelX,
                 panelY,
                 panelX + panelWidth,
                 panelY + panelHeight,
-                0x80000000
+                backgroundColor
         );
 
         // Render top border
