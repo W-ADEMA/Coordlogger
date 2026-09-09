@@ -8,11 +8,12 @@
 		"WADEMA"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/mod/logged-out",
+		"issues": "https://github.com/W-ADEMA/LoggedOut",
+		"sources": "https://github.com/W-ADEMA/LoggedOut"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/Loggedout/icon.png",
+	"icon": "assets/loggedout/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
