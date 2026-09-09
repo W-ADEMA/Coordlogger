@@ -6,6 +6,7 @@ A client-side Minecraft Fabric mod that saves the player's last logout location.
 
 * Saves coordinates and world information
 * Stores the information in a .json file
+* Displays the contents of the .json file ingame
 
 ## Requirements
 
